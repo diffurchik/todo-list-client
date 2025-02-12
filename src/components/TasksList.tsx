@@ -1,6 +1,7 @@
 import {FC, useEffect} from "react";
 import {useAppContext} from "./appContext.tsx";
 import {Task} from "./types.ts";
+import {TaskComponent} from "./Task.tsx";
 
 export const TasksList: FC = () => {
 
@@ -15,15 +16,11 @@ export const TasksList: FC = () => {
             setTasks(list)
         }
         fetchData().catch(err => console.error(err))
-    }, [])
+    }, [setTasks])
 
     return <div style={{marginTop: 50}}>
         {tasks.length !== 0 ? tasks.map((task: Task, index) =>
-            <div
-                style={{marginBottom: 10, color: 'black', padding: 5, textAlign: 'left', display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <input type={"checkbox"} id={`task_${index}`} style={{marginRight: 6, cursor: 'pointer'}}/>
-                <label htmlFor={`task_${index}`}>{task.title}</label>
-            </div>) :
+            <TaskComponent index={index} task={task}/>) :
             <p>You don't have incomplete tasks</p>
         }
     </div>

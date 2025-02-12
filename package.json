@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start" : "npm run dev"
+    "start": "npm run dev"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

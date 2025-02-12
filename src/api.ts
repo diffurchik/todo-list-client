@@ -31,16 +31,17 @@ export class ApiService {
     }
 
     async updateTask(
-        id: string,
+        id: number,
         payload: Partial<Pick<Task, 'checked' | 'title'>>
     ): Promise<Task> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
-            method: 'PATCH', // or PUT depending on your API
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
         });
+        console.log('payload', payload);
 
         if (!response.ok) {
             const errorText = await response.text();
