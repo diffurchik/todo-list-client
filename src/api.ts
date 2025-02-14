@@ -32,7 +32,7 @@ export class ApiService {
 
     async updateTask(
         id: number,
-        payload: Partial<Pick<Task, 'checked' | 'title'>>
+        payload: Partial<Pick<Task, 'checked' | 'title' | 'dueDate'>>
     ): Promise<Task> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PUT',
@@ -48,6 +48,22 @@ export class ApiService {
             throw new Error(`Error updating task: ${errorText}`);
         }
 
+        const data = await response.json();
+        return data.task;
+    }
+
+    async deleteTask(id: number): Promise<void> {
+        const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        console.log('deleted task', response);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error deleting task: ${errorText}`);
+        }
         const data = await response.json();
         return data.task;
     }

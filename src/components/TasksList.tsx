@@ -1,7 +1,7 @@
 import {FC, useEffect} from "react";
 import {useAppContext} from "./appContext.tsx";
 import {Task} from "./types.ts";
-import {TaskComponent} from "./Task.tsx";
+import {TaskComponent} from "./TaskComponent.tsx";
 
 export const TasksList: FC = () => {
 
@@ -9,7 +9,7 @@ export const TasksList: FC = () => {
 
     useEffect(() => {
         let list: Task[] = []
-        const fetchData = async () => {
+        const fetchData = async () => { // TODO: need to move this function to api.ts class
             list = await fetch('http://localhost:3000/tasks')
                 .then(res => res.json())
                 .catch(err => console.error(err))

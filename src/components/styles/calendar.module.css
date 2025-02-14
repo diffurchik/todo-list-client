@@ -1,0 +1,54 @@
+.react_calendar {
+    transform: scale(0.9);
+    border: none;
+}
+
+.set_date_button{
+    background-color: #ebf5fb;
+    font-size: 0.7em;
+    margin-bottom: 10px;
+}
+
+.set_date_button:hover{
+    background-color: #f8f9f9
+}
+
+:global(.react-calendar__tile--now) {
+    background: #d6eaf8 !important;
+    color: black !important;
+}
+
+:global(.react-calendar){
+    border: none;
+}
+
+:global(.react-calendar__month-view__days__day--weekend) {
+    color: #c0392b !important;
+}
+
+:global(.react-calendar__tile--active) {
+    background: #d7bde2 !important;
+    color: black !important;
+}
+
+:global(.react-calendar__month-view__weekdays ){
+    background:#f2f3f4 !important;
+    text-decoration-line: none;
+}
+
+:global(.react-calendar__month-view__weekdays abbr) {
+    text-decoration: none !important;
+    font-weight: normal;
+    font-size: 0.73em;
+}
+
+:global(.react-calendar__navigation button){
+    font-size: 0.75em;
+    min-width: 0;
+    min-height: 0;
+    height: 30px;
+}
+
+:global(.react-calendar__navigation ) {
+    margin-bottom: 0;
+}

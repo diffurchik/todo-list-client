@@ -33,15 +33,32 @@ describe('ApiService', () => {
     })
 
     it('should throw an error when the API returns a non-ok response', async () => {
-        // Arrange: simulate a failed response from fetch
         (global.fetch as jest.Mock).mockResolvedValueOnce({
             ok: false,
             text: async () => 'Bad Request',
         });
 
-        // Act & Assert: createTask should throw an error
         await expect(api.createTask({title: 'Test Task'})).rejects.toThrow(
             'Error creating task: Bad Request'
         );
     });
+
+    it('should update a task', async () => {
+        const fakeTask: Task = {id: 1, title: 'Test Task'};
+        const payload: CreateTaskPayload = {title: 'new title'};
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({message: 'New title'}),
+        })
+        const result = await api.updateTask(fakeTask.id, payload);
+        expect(result).toEqual({id: 1, title: 'new title'});
+        expect(fetch).toHaveBeenCalledWith(`${baseUrl}/tasks/${fakeTask.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+    })
 })
