@@ -1,7 +1,7 @@
 import './App.css'
-import {AppProvider} from "./components/appContext.tsx";
+import {AppProvider} from "./appContext.tsx";
 import styles from "./styles.module.css"
-import {TasksList} from "./components/TasksList.tsx";
+import {TasksList} from "./components/task-components/TasksList.tsx";
 import {NewTask} from "./components/NewTask.tsx";
 
 function App() {

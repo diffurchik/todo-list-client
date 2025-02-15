@@ -1,8 +1,9 @@
 import * as React from "react";
 import {useCallback, useState} from "react";
-import {Task} from "./types.ts";
-import {ApiService} from "../api.ts";
+import {Task} from "../types.ts";
+import {ApiService} from "../../api.ts";
 import {TaskMenu} from "./TaskMenu.tsx";
+import {IconButton} from "../atom-components/IconButton.tsx";
 
 type Props = {
     index: number;
@@ -70,24 +71,8 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                     <label htmlFor={`task_${index}`}
                            style={{textDecoration: checked ? 'line-through' : ''}}>{task.title}</label>
                 </div>
-                <button
-                    onClick={onMenuClick}
-                    style={{
-                        background: isMenuOpen ? '#eaeded' : 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 20,
-                        height: 20,
-                        opacity: isHovered ? 1 : 0,
-                        marginRight: 4
-                    }}
-                >
-                    <img src="/three-dot.svg" alt="drop-down menu of task" width="15" height="15"/>
-                </button>
+                <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20} isHovered={isHovered}
+                            backgroundTrigger={isMenuOpen}/>
 
                 {isMenuOpen && <TaskMenu task={task}/>}
             </div>

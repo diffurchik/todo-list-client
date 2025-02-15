@@ -1,7 +1,7 @@
-import styles from './styles/task-menu.module.css'
+import styles from '../styles/task-menu.module.css'
 import {useCallback, useState} from "react";
 import {SetDataComponent} from "./SetDataComponent.tsx";
-import {Task} from "./types.ts";
+import {Task} from "../types.ts";
 
 type Props = {
     task: Task

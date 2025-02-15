@@ -1,8 +1,8 @@
 import {FC, useEffect} from "react";
-import {useAppContext} from "./appContext.tsx";
-import {Task} from "./types.ts";
+import {useAppContext} from "../../appContext.tsx";
+import {Task} from "../types.ts";
 import {TaskComponent} from "./TaskComponent.tsx";
-import {ApiService} from "../api.ts";
+import {ApiService} from "../../api.ts";
 
 const api = new ApiService('http://localhost:3000')
 export const TasksList: FC = () => {

@@ -1,4 +1,4 @@
-import {useAppContext} from "./appContext.tsx";
+import {useAppContext} from "../appContext.tsx";
 import {useCallback, useEffect, useState} from "react";
 import styles from './input-style.module.css'
 

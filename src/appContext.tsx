@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useState} from "react";
 import * as React from "react";
-import {Task} from "./types.ts";
+import {Task} from "./components/types.ts";
 
 type AppProviderProps = {
     children: ReactNode;

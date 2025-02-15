@@ -1,10 +1,11 @@
 import Calendar from "react-calendar";
-import styles from "./styles/calendar.module.css"
+import styles from "../styles/calendar.module.css"
 import 'react-calendar/dist/Calendar.css';
 import * as React from "react";
 import {useCallback, useState} from "react";
-import {ApiService} from "../api.ts";
-import {Task} from "./types.ts";
+import {ApiService} from "../../api.ts";
+import {Task} from "../types.ts";
+import {IconButton} from "../atom-components/IconButton.tsx";
 
 type ValuePiece = Date | null;
 
@@ -57,14 +58,15 @@ export const SetDataComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Pro
             zIndex: 11,
             width: 250
         }}>
-            <button style={{
-                width: 20, height: 20, backgroundColor: "transparent", padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }} onClick={onBackButtonClick}>
-                <img src="/arrow-left.svg" alt="drop-down menu of task" width="15" height="15"/>
-            </button>
+            {/*<button style={{*/}
+            {/*    width: 20, height: 20, backgroundColor: "transparent", padding: 0,*/}
+            {/*    display: 'flex',*/}
+            {/*    alignItems: 'center',*/}
+            {/*    justifyContent: 'center',*/}
+            {/*}} onClick={onBackButtonClick}>*/}
+            {/*    <img src="/arrow-left.svg" alt="drop-down menu of task" width="15" height="15"/>*/}
+            {/*</button>*/}
+            <IconButton icon={"/arrow-left.svg"} width={20} height={20} onClick={onBackButtonClick}/>
             <Calendar className={styles.react_calendar} onChange={onChange} value={value}/>
             <button className={styles.set_date_button} onClick={handleSetDateClick}>{`Set ${formattedDate}`}</button>
         </div>

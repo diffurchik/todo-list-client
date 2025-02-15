@@ -1,6 +1,6 @@
 import styles from "../styles.module.css";
 import {useCallback, useState} from "react";
-import {useAppContext} from "./appContext.tsx";
+import {useAppContext} from "../appContext.tsx";
 import {ApiService} from "../api.ts";
 
 const api = new ApiService('http://localhost:3000');
