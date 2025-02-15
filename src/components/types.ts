@@ -4,10 +4,14 @@ export type Task = {
     checked?: boolean;
     priority?: number;
     description?: string;
-    dueDate?: Date;
+    dueDate?: string | Date;
 }
 
 export type TaskDTO = {
-    message: string,
-    task: Task,
+        id: number;
+        title: string;
+        checked?: boolean;
+        priority?: number;
+        description?: string;
+        due_date: string
 }

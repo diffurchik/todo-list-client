@@ -35,6 +35,11 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
         setHovered((prev) => !prev)
     }, [])
 
+    const formattedDueDate = new Intl.DateTimeFormat('en-GB', {
+        day: 'numeric',
+        month: 'long'
+    }).format(new Date(task.dueDate as Date));
+
     return (
         <>
 
@@ -60,7 +65,7 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                         alignItems: "center"
                     }}>
                     <input type={"checkbox"} id={`task_${index}`}
-                           style={{marginRight: 6, cursor: 'pointer', transform: 'scale(1.2)'}} checked={checked}
+                           style={{marginRight: 12, cursor: 'pointer', transform: 'scale(1.4)'}} checked={checked}
                            onChange={clickCheckbox}/>
                     <label htmlFor={`task_${index}`}
                            style={{textDecoration: checked ? 'line-through' : ''}}>{task.title}</label>
@@ -86,6 +91,7 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
 
                 {isMenuOpen && <TaskMenu task={task}/>}
             </div>
+            <div style={{fontSize: 12}}>{`due date: ${formattedDueDate}`}</div>
             <hr style={{opacity: 0.3}}/>
         </>
     )

@@ -25,7 +25,7 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
                 style={{
                     position: 'absolute',
                     top: '20%',
-                    right: '-145%',
+                    right: '-110%',
                     background: 'white',
                     border: '1px solid #ccc',
                     borderRadius: '5px',
@@ -51,7 +51,7 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
                     </li>
                 </ul>
             </div>
-            {isCalendarOpen && <SetDataComponent task={task}/>}
+            {isCalendarOpen && <SetDataComponent task={task} setIsCalendarOpen={setIsCalendarOpen}/>}
         </>
     )
 }

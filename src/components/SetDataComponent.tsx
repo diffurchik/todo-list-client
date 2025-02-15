@@ -13,10 +13,11 @@ const api = new ApiService('http://localhost:3000')
 
 
 type Props = {
-    task: Task
+    task: Task,
+    setIsCalendarOpen: (value: boolean) => void
 }
 
-export const SetDataComponent: React.FC<Props> = ({task}: Props) => {
+export const SetDataComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Props) => {
     const [value, onChange] = useState<Value>(new Date());
 
     const dateToFormat = Array.isArray(value) ? value[0] : value;
@@ -39,6 +40,10 @@ export const SetDataComponent: React.FC<Props> = ({task}: Props) => {
         }
     }, [dateToFormat, task.id])
 
+    const onBackButtonClick = useCallback(() => {
+        setIsCalendarOpen(false)
+    }, [setIsCalendarOpen])
+
     return (
         <div style={{
             position: 'absolute',
@@ -57,7 +62,7 @@ export const SetDataComponent: React.FC<Props> = ({task}: Props) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-            }}>
+            }} onClick={onBackButtonClick}>
                 <img src="/arrow-left.svg" alt="drop-down menu of task" width="15" height="15"/>
             </button>
             <Calendar className={styles.react_calendar} onChange={onChange} value={value}/>

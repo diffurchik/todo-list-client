@@ -1,4 +1,5 @@
-import {Task} from "./components/types.ts";
+import {Task, TaskDTO} from "./components/types.ts";
+import {taskDTOToTaskMapper} from "./utils.ts";
 
 
 export interface CreateTaskPayload {
@@ -10,6 +11,18 @@ export class ApiService {
 
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
+    }
+
+    async getAllTasks(){
+        const response = await fetch(`${this.baseUrl}/tasks`)
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error creating task: ${errorText}`);
+        }
+
+        const data: TaskDTO[] = await response.json();
+        return taskDTOToTaskMapper(data)
     }
 
     async createTask(payload: CreateTaskPayload): Promise<Task> {
