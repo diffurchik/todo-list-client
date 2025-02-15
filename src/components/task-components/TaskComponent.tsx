@@ -4,13 +4,13 @@ import {Task} from "../types.ts";
 import {ApiService} from "../../api.ts";
 import {TaskMenu} from "./TaskMenu.tsx";
 import {IconButton} from "../atom-components/IconButton.tsx";
+import { API_BASE_URL } from '../../../config.ts';
+const api = new ApiService(API_BASE_URL);
 
 type Props = {
     index: number;
     task: Task
 }
-
-const api = new ApiService('http://localhost:3000')
 
 export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
     const [checked, setChecked] = useState<boolean>(false)
@@ -33,7 +33,11 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
     }, [isMenuOpen])
 
     const onTaskHover = useCallback(() => {
-        setHovered((prev) => !prev)
+        setHovered(true)
+    }, [])
+
+    const onTaskUnHover = useCallback(() => {
+        setHovered(false)
     }, [])
 
     const formattedDueDate = new Intl.DateTimeFormat('en-GB', {
@@ -54,10 +58,9 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                 width: 200,
                 marginBottom: '10px',
             }} onMouseEnter={onTaskHover}
-                 onMouseLeave={onTaskHover}>
+                 onMouseLeave={onTaskUnHover}>
                 <div
                     style={{
-                        // marginBottom: 10,
                         color: 'black',
                         padding: 5,
                         textAlign: 'left',
@@ -71,8 +74,9 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                     <label htmlFor={`task_${index}`}
                            style={{textDecoration: checked ? 'line-through' : ''}}>{task.title}</label>
                 </div>
-                <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20} isHovered={isHovered}
-                            backgroundTrigger={isMenuOpen}/>
+                <div style={{opacity: isHovered ? 1 : 0}}>
+                    <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20}/>
+                </div>
 
                 {isMenuOpen && <TaskMenu task={task}/>}
             </div>

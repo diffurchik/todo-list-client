@@ -2,8 +2,9 @@ import styles from "../styles.module.css";
 import {useCallback, useState} from "react";
 import {useAppContext} from "../appContext.tsx";
 import {ApiService} from "../api.ts";
+import { API_BASE_URL } from '../../config.ts';
 
-const api = new ApiService('http://localhost:3000');
+const api = new ApiService(API_BASE_URL);
 
 export const NewTask: React.FC = () => {
 

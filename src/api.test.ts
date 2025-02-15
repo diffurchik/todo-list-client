@@ -1,11 +1,13 @@
 import {ApiService, CreateTaskPayload} from "./api.ts";
 import {Task} from "./components/types.ts";
+import { API_BASE_URL } from '../config.ts';
+
+
 
 global.fetch = jest.fn()
 
 describe('ApiService', () => {
-    const baseUrl = 'http://localhost:3000';
-    const api = new ApiService(baseUrl);
+    const api = new ApiService(API_BASE_URL);
 
     afterEach(() => {
         jest.resetAllMocks();
@@ -23,7 +25,7 @@ describe('ApiService', () => {
         const result = await api.createTask(payload);
 
         expect(result).toEqual(fakeTask);
-        expect(fetch).toHaveBeenCalledWith(`${baseUrl}/tasks`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +55,7 @@ describe('ApiService', () => {
         })
         const result = await api.updateTask(fakeTask.id, payload);
         expect(result).toEqual({id: 1, title: 'new title'});
-        expect(fetch).toHaveBeenCalledWith(`${baseUrl}/tasks/${fakeTask.id}`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks/${fakeTask.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,4 +63,62 @@ describe('ApiService', () => {
             body: JSON.stringify(payload),
         })
     })
+
+    it('should fetch all tasks successfully', async () => {
+        const fakeTasks: Task[] = [
+            { id: 1, title: 'Task 1', checked: false },
+            { id: 2, title: 'Task 2', checked: true },
+        ];
+
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+            ok: true,
+            json: async () => fakeTasks,
+        });
+
+        const result = await api.getAllTasks();
+
+        expect(result).toEqual(fakeTasks);
+        expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks`, {
+            method: 'GET',
+        });
+    });
+
+    it('should throw an error when fetching tasks fails', async () => {
+        (global.fetch as jest.Mock).mockResolvedValueOnce({
+            ok: false,
+            text: async () => 'Internal Server Error',
+        });
+
+        await expect(api.getAllTasks()).rejects.toThrow(
+            'Error fetching tasks: Internal Server Error'
+        );
+    });
 })
+
+
+    // it('should delete a task successfully', async () => {
+    //     const taskId = 1;
+    //
+    //     (global.fetch as jest.Mock).mockResolvedValueOnce({
+    //         ok: true,
+    //     });
+    //
+    //     await api.deleteTask(taskId);
+    //
+    //     expect(fetch).toHaveBeenCalledWith(`${baseUrl}/tasks/${taskId}`, {
+    //         method: 'DELETE',
+    //     });
+    // });
+    //
+    // it('should throw an error when task deletion fails', async () => {
+    //     const taskId = 1;
+    //
+    //     (global.fetch as jest.Mock).mockResolvedValueOnce({
+    //         ok: false,
+    //         text: async () => 'Deletion failed',
+    //     });
+    //
+    //     await expect(api.deleteTask(taskId)).rejects.toThrow(
+    //         'Error deleting task: Deletion failed'
+    //     );
+    // });

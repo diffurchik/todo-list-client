@@ -36,13 +36,19 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
             >
                 <ul className={styles.task_menu}>
                     <li style={{padding: '5px', cursor: 'pointer'}} onClick={handleSetDate}>
-                        <img src="/calendar.svg" alt="Delete" width="16" height="16" style={{marginRight: '8px'}}/>
+                        <img src="/calendar-icon4.svg" alt="Delete" width="16" height="16"
+                             style={{marginRight: '8px'}}/>
                         Set date
                     </li>
-                    <li style={{padding: '5px', cursor: 'pointer'}}>
-                        <img src="/postpone-arrow.svg" alt="Delete" width="16" height="16"
+                    <li style={{padding: '5px', cursor: 'pointer', opacity: 0.5}}>
+                        <img src="/tomorrow.svg" alt="Delete" width="16" height="16"
                              style={{marginRight: '8px', opacity: 0.65}}/>
                         Postpone to tomorrow
+                    </li>
+                    <li style={{padding: '5px', cursor: 'pointer', opacity: 0.5}}>
+                        <img src="/tomorrow2.svg" alt="Repeat" width="16" height="16"
+                             style={{marginRight: '8px', opacity: 0.65}}/>
+                        Repeat task
                     </li>
                     <hr style={{opacity: 0.5}}/>
                     <li className={styles.delete} onClick={handleDelete}>

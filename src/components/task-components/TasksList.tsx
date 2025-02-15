@@ -3,8 +3,9 @@ import {useAppContext} from "../../appContext.tsx";
 import {Task} from "../types.ts";
 import {TaskComponent} from "./TaskComponent.tsx";
 import {ApiService} from "../../api.ts";
+import { API_BASE_URL } from '../../../config.ts';
 
-const api = new ApiService('http://localhost:3000')
+const api = new ApiService(API_BASE_URL);
 export const TasksList: FC = () => {
 
     const {tasks, setTasks} = useAppContext()
