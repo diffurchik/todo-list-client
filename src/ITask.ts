@@ -5,4 +5,5 @@ export interface ITask {
     priority?: number;
     description?: string;
     dueDate?: Date;
+    repeated?: boolean;
 }

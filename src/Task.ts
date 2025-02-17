@@ -7,33 +7,15 @@ export class Task implements ITask {
     priority?: number;
     description?: string;
     dueDate?: Date;
-
+    repeated?: boolean;
+    
     constructor(data: ITask) {
         this.id = data.id;
         this.title = data.title;
         this.checked = data.checked;
         this.priority = data.priority;
-        this.description = data.description;
+        this.description = data.description;    
         this.dueDate = data.dueDate;
-    }
-
-    getFormattedDueDate(): string {
-        return this.dueDate
-            ? new Intl.DateTimeFormat('en-GB', {
-                day: 'numeric',
-                month: 'long'
-            }).format(this.dueDate)
-            : '';
-    }
-
-    toApiDTO() {
-        return {
-            id: this.id,
-            title: this.title,
-            checked: this.checked,
-            priority: this.priority,
-            description: this.description,
-            due_date: this.dueDate ? this.dueDate.toISOString() : null,
-        };
+        this.repeated = data.repeated;
     }
 }

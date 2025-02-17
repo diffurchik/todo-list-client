@@ -29,8 +29,11 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
 
     const onMenuClick = useCallback(() => {
         setIsMenuOpen((prev) => !prev)
-        console.log('isMenuOpen:', isMenuOpen)
-    }, [isMenuOpen])
+    }, [])
+
+    const onMenuClose = useCallback(() => {
+        setIsMenuOpen(false)
+    }, [])
 
     const onTaskHover = useCallback(() => {
         setHovered(true)
@@ -78,7 +81,7 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                     <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20}/>
                 </div>
 
-                {isMenuOpen && <TaskMenu task={task}/>}
+                {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose}/>}
             </div>
             <div style={{fontSize: 12}}>{`due date: ${formattedDueDate}`}</div>
             <hr style={{opacity: 0.3}}/>

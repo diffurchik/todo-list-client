@@ -1,15 +1,49 @@
 import styles from '../styles/task-menu.module.css'
-import {useCallback, useState} from "react";
+import {useCallback, useRef, useState, useEffect} from "react";
 import {SetDataComponent} from "./SetDataComponent.tsx";
 import {Task} from "../types.ts";
+import { RepeatMenuComponent } from './RepeatMenuComponent.tsx';
 
 type Props = {
-    task: Task
+    task: Task,
+    onMenuClose: () => void
 }
 
-export const TaskMenu: React.FC<Props> = ({task}: Props) => {
+export const TaskMenu: React.FC<Props> = ({task, onMenuClose}: Props) => {
 
     const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+    const [isRepeatOpen, setIsRepeatOpen] = useState<boolean>(false);   
+    const menuRef = useRef<HTMLDivElement>(null);
+
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const calendarElement = document.querySelector('#calendar-container');
+            const repeatElement = document.querySelector('#repeat-menu');
+            if (
+                menuRef.current && 
+                !menuRef.current.contains(event.target as Node) && 
+                (!calendarElement || !calendarElement.contains(event.target as Node)) &&
+                (!repeatElement || !repeatElement.contains(event.target as Node))
+            ) {
+                onMenuClose();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [onMenuClose]);
+
+    const handleRepeatOpen = useCallback(() => {
+        setIsRepeatOpen((prev) => !prev)
+    }, [])
+
+    const handleRepeatClose = useCallback(() => {
+        setIsRepeatOpen(false)
+    }, [])
 
     const handleDelete = useCallback(() => {
 
@@ -22,6 +56,7 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
     return (
         <>
             <div
+                ref={menuRef}
                 style={{
                     position: 'absolute',
                     top: '20%',
@@ -45,7 +80,7 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
                              style={{marginRight: '8px', opacity: 0.65}}/>
                         Postpone to tomorrow
                     </li>
-                    <li style={{padding: '5px', cursor: 'pointer', opacity: 0.5}}>
+                    <li style={{padding: '5px', cursor: 'pointer'}} onClick={handleRepeatOpen}>
                         <img src="/tomorrow2.svg" alt="Repeat" width="16" height="16"
                              style={{marginRight: '8px', opacity: 0.65}}/>
                         Repeat task
@@ -58,6 +93,7 @@ export const TaskMenu: React.FC<Props> = ({task}: Props) => {
                 </ul>
             </div>
             {isCalendarOpen && <SetDataComponent task={task} setIsCalendarOpen={setIsCalendarOpen}/>}
+            {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose}/>}
         </>
     )
 }

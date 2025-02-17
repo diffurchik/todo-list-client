@@ -1,0 +1,15 @@
+.button_apply {
+    background: transparent;
+    border: 1px solid #ccc;
+    padding: 10;
+    border-radius: 5;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.button_apply:hover {
+    background: #eaf2f8;
+}

@@ -46,7 +46,7 @@ export const SetDataComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Pro
     }, [setIsCalendarOpen])
 
     return (
-        <div style={{
+        <div id = 'calendar-container' style={{
             position: 'absolute',
             top: '20%',
             right: '-145%',

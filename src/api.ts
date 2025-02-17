@@ -1,5 +1,5 @@
 import {Task, TaskDTO} from "./components/types.ts";
-import {taskDTOToTaskMapper} from "./utils.ts";
+
 
 
 export interface CreateTaskPayload {
@@ -13,7 +13,7 @@ export class ApiService {
         this.baseUrl = baseUrl;
     }
 
-    async getAllTasks(){
+    async getAllTasks(): Promise<TaskDTO[]> {
         const response = await fetch(`${this.baseUrl}/tasks`)
 
         if (!response.ok) {
@@ -21,11 +21,10 @@ export class ApiService {
             throw new Error(`Error creating task: ${errorText}`);
         }
 
-        const data: TaskDTO[] = await response.json();
-        return taskDTOToTaskMapper(data)
+        return await response.json();
     }
 
-    async createTask(payload: CreateTaskPayload): Promise<Task> {
+    async createTask(payload: CreateTaskPayload): Promise<TaskDTO> {
         const response = await fetch(`${this.baseUrl}/tasks`, {
             method: 'POST',
             headers: {
@@ -45,7 +44,7 @@ export class ApiService {
 
     async updateTask(
         id: number,
-        payload: Partial<Pick<Task, 'checked' | 'title' | 'dueDate'>>
+        payload: Partial<Pick<Task, 'checked' | 'title' | 'dueDate' | 'repeated'>>
     ): Promise<Task> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PUT',
@@ -54,7 +53,6 @@ export class ApiService {
             },
             body: JSON.stringify(payload),
         });
-        console.log('payload', payload);
 
         if (!response.ok) {
             const errorText = await response.text();

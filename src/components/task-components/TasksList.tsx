@@ -2,25 +2,21 @@ import {FC, useEffect} from "react";
 import {useAppContext} from "../../appContext.tsx";
 import {Task} from "../types.ts";
 import {TaskComponent} from "./TaskComponent.tsx";
-import {ApiService} from "../../api.ts";
-import { API_BASE_URL } from '../../../config.ts';
-
-const api = new ApiService(API_BASE_URL);
+import { TasksWorker } from "../TasksWorker.ts";    
+    
 export const TasksList: FC = () => {
 
     const {tasks, setTasks} = useAppContext()
 
     useEffect(() => {
-        let list: Task[] | undefined = []
-        const fetchData = async () => { // TODO: need to move this function to api.ts class
-            list = await api.getAllTasks()
-            console.log('list', list)
-            if(list) {
-
+        const tasksWorker = new TasksWorker()
+        tasksWorker.getAllTasks().then((list) => {
+            if (list) {
                 setTasks(list)
             }
-        }
-        fetchData().catch(err => console.error(err))
+        }).catch((error) => {
+            console.error(error)
+        })
     }, [setTasks])
 
     return <div style={{marginTop: 50}}>
