@@ -1,11 +1,8 @@
 import * as React from "react";
 import {useCallback, useState} from "react";
-import {Task} from "../types.ts";
-import {ApiService} from "../../api.ts";
 import {TaskMenu} from "./TaskMenu.tsx";
 import {IconButton} from "../atom-components/IconButton.tsx";
-import { API_BASE_URL } from '../../../config.ts';
-const api = new ApiService(API_BASE_URL);
+import { Task } from "../../Task.ts";
 
 type Props = {
     index: number;
@@ -16,16 +13,6 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
     const [checked, setChecked] = useState<boolean>(false)
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
-
-    const clickCheckbox = useCallback(async () => {
-        setChecked((prev) => !prev)
-        try {
-            const updatedTask = await api.updateTask(task.id, {checked: !task.checked});
-            console.log('Updated Task:', updatedTask);
-        } catch (error) {
-            console.error('Failed to update task:', error);
-        }
-    }, [task.checked, task.id])
 
     const onMenuClick = useCallback(() => {
         setIsMenuOpen((prev) => !prev)
@@ -42,6 +29,11 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
     const onTaskUnHover = useCallback(() => {
         setHovered(false)
     }, [])
+
+    const clickCheckbox = useCallback(() => {
+        setChecked((prev) => !prev)
+        task.setTaskAsDone()
+    }, [task])
 
     const formattedDueDate = new Intl.DateTimeFormat('en-GB', {
         day: 'numeric',
@@ -83,7 +75,10 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
 
                 {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose}/>}
             </div>
-            <div style={{fontSize: 12}}>{`due date: ${formattedDueDate}`}</div>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div style={{fontSize: 12}}>{`date: ${formattedDueDate}`}</div>
+                {task.isTaskRepeated() && <img src={"/repeat.svg"} alt="repeat" style={{ width: 15, height: 15 }} />}
+            </div>
             <hr style={{opacity: 0.3}}/>
         </>
     )

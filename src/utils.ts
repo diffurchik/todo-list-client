@@ -13,7 +13,7 @@ export const taskMapper = (task: TaskDTO): Task => {
         checked: task.checked,
         description: task.description,
         priority: task.priority,
-        dueDate: task.due_date ? new Date(task.due_date) : undefined,
+        dueDate: task.due_date ? new Date(task.due_date) : new Date(),
         repeated: task.repeated,
     });
 };

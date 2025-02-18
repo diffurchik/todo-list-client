@@ -17,3 +17,10 @@ export type TaskDTO = {
   due_date: string;
   repeated?: boolean;
 };
+
+export enum TasksFilter {
+    ALL = 'all',
+    TODAY = 'today',
+    TOMORROW = 'tomorrow',
+    WEEKEND = 'weekend',
+}

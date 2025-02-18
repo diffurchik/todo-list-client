@@ -2,17 +2,19 @@ import { useCallback } from "react"
 import { IconButton } from "../atom-components/IconButton"
 import WeekDaysPicker from "../atom-components/WeekDaysPicker"
 import styles from "../styles/button-apply.module.css"
-
+import { ButtonComponent } from "../atom-components/ButtonComponent.tsx"
+import { Task } from "../../Task.ts"
 type RepeatMenuComponentProps = {
-    onClose: () => void
+    onClose: () => void,
+    task: Task
 }
 
-export const RepeatMenuComponent: React.FC<RepeatMenuComponentProps> = ({ onClose }: RepeatMenuComponentProps) => {
+export const RepeatMenuComponent: React.FC<RepeatMenuComponentProps> = ({ onClose, task }: RepeatMenuComponentProps) => {
 
     const handleApplyButtonClick = useCallback(() => {
-        console.log("Apply button clicked")
+        task.setTaskRepeated(true)
         onClose()
-    }, [onClose])
+    }, [onClose, task])
 
     return (
         <div id = 'repeat-menu' style={{
@@ -36,7 +38,11 @@ export const RepeatMenuComponent: React.FC<RepeatMenuComponentProps> = ({ onClos
                 <div style={{padding: 10, fontSize: 14, fontWeight: 600, flex: 1}}>Repeat settings</div>
             </div>
 
-            <WeekDaysPicker/>
+            <WeekDaysPicker />
+            <div style={{display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 10, marginTop: 15}}>
+                <ButtonComponent onClick={() => { }} hasIcon={true} iconPath={"/weekend.svg"} title="Repeat every weekend" size="small" />
+                <ButtonComponent onClick={() => { }} hasIcon={true} iconPath={"/weekend.svg"} title="Repeat every work day" size="small" />
+            </div>
             <button className={styles.button_apply} onClick={handleApplyButtonClick}>Apply settings</button>
         </div>
     )

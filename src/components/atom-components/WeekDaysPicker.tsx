@@ -20,7 +20,7 @@ const WeekDaysPicker: React.FC = () => {
   };
 
   return (
-    <div id = 'week-days-picker' style={{ display: 'flex', gap: '0.3rem' }}>
+    <div id = 'week-days-picker' style={{ display: 'flex', gap: '0.2rem' }}>
       {days.map((day) => (
         <button
           key={day.value}

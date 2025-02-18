@@ -1,8 +1,8 @@
 import styles from '../styles/task-menu.module.css'
 import {useCallback, useRef, useState, useEffect} from "react";
-import {SetDataComponent} from "./SetDataComponent.tsx";
-import {Task} from "../types.ts";
+import { CalendarComponent } from "./CalendarComponent.tsx";
 import { RepeatMenuComponent } from './RepeatMenuComponent.tsx';
+import { Task } from '../../Task.ts';
 
 type Props = {
     task: Task,
@@ -81,7 +81,7 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose}: Props) => {
                         Postpone to tomorrow
                     </li>
                     <li style={{padding: '5px', cursor: 'pointer'}} onClick={handleRepeatOpen}>
-                        <img src="/tomorrow2.svg" alt="Repeat" width="16" height="16"
+                        <img src="/repeat.svg" alt="Repeat" width="16" height="16"
                              style={{marginRight: '8px', opacity: 0.65}}/>
                         Repeat task
                     </li>
@@ -92,8 +92,8 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose}: Props) => {
                     </li>
                 </ul>
             </div>
-            {isCalendarOpen && <SetDataComponent task={task} setIsCalendarOpen={setIsCalendarOpen}/>}
-            {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose}/>}
+            {isCalendarOpen && <CalendarComponent task={task} setIsCalendarOpen={setIsCalendarOpen}/>}
+            {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose} task={task}/>}
         </>
     )
 }

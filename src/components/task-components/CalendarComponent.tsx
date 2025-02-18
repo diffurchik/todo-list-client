@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import * as React from "react";
 import {useCallback, useState} from "react";
 import {ApiService} from "../../api.ts";
-import {Task} from "../types.ts";
+import {Task} from "../../Task.ts";
 import {IconButton} from "../atom-components/IconButton.tsx";
 import { API_BASE_URL } from '../../../config.ts';
 const api = new ApiService(API_BASE_URL);
@@ -18,7 +18,7 @@ type Props = {
     setIsCalendarOpen: (value: boolean) => void
 }
 
-export const SetDataComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Props) => {
+export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Props) => {
     const [value, onChange] = useState<Value>(new Date());
 
     const dateToFormat = Array.isArray(value) ? value[0] : value;
@@ -33,13 +33,14 @@ export const SetDataComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Pro
     const handleSetDateClick = useCallback(async () => {
         try {
             if (dateToFormat) {
-                const updatedTask = await api.updateTask(task.id, {dueDate: dateToFormat});
+                const updatedTask = await api.updateTask(task.id, {dueDate: dateToFormat}); // move to task worker
                 console.log('Updated Task:', updatedTask);
+                setIsCalendarOpen(false)
             }
         } catch (error) {
             console.error('Failed to update task:', error);
         }
-    }, [dateToFormat, task.id])
+    }, [dateToFormat, task.id, setIsCalendarOpen])
 
     const onBackButtonClick = useCallback(() => {
         setIsCalendarOpen(false)

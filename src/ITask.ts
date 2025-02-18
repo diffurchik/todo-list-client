@@ -4,6 +4,6 @@ export interface ITask {
     checked?: boolean;
     priority?: number;
     description?: string;
-    dueDate?: Date;
+    dueDate: Date;
     repeated?: boolean;
 }
