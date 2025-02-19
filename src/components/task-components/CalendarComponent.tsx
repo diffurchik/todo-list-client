@@ -33,7 +33,7 @@ export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Pr
     const handleSetDateClick = useCallback(async () => {
         try {
             if (dateToFormat) {
-                const updatedTask = await api.updateTask(task.id, {dueDate: dateToFormat}); // move to task worker
+                const updatedTask = await api.updateTask(task.id, {due_date: dateToFormat.toISOString()}); // move to task worker
                 console.log('Updated Task:', updatedTask);
                 setIsCalendarOpen(false)
             }

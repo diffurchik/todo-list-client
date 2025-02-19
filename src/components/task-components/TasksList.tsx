@@ -7,13 +7,13 @@ import { TasksFilter } from "../types.ts";
     
 export const TasksList: FC = () => {
 
-    const { tasks, setTasks, tasksFilter } = useAppContext()
+    const {setAllTasks, filter, filteredTasks } = useAppContext()
 
-    useEffect(() => {
+    useEffect(() => {   
         const tasksWorker = new TasksWorker()
         tasksWorker.getAllTasks().then((list) => {
             if (list) {
-                setTasks(list.map(task => new Task( 
+                setAllTasks(list.map(task => new Task( 
                     {
                         id: task.id,
                     title: task.title,
@@ -26,19 +26,19 @@ export const TasksList: FC = () => {
             }
         }).catch((error) => { 
             console.error(error)
-        })
-    }, [setTasks])
+        })  
+    }, [setAllTasks])
 
     return <div style={{ marginTop: 40 }}>
         <div style={{ fontSize: 24, marginBottom: 50, fontWeight: 600, textAlign: 'left' }}>            
-            {tasksFilter === TasksFilter.ALL && <div>All</div>}
-            {tasksFilter === TasksFilter.TODAY && <div>Today</div>}
-            {tasksFilter === TasksFilter.TOMORROW && <div>Tomorrow</div>}
-            {tasksFilter === TasksFilter.WEEKEND && <div>Weekend</div>}
+            {filter === TasksFilter.ALL && <div>All incoming tasks </div>}
+            {filter === TasksFilter.TODAY && <div>Today</div>}
+            {filter === TasksFilter.TOMORROW && <div>Tomorrow</div>}
+            {filter === TasksFilter.WEEKEND && <div>Weekend</div>}
 
         </div>
         
-        {tasks.length !== 0 ? tasks.map((task: Task, index: number) =>
+        {filteredTasks.length !== 0 ? filteredTasks.map((task: Task, index: number) =>
             <TaskComponent task={task} index={index}/>) :
             <p>You don't have incomplete tasks for this filter</p>
         }

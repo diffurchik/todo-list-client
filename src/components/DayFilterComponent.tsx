@@ -3,16 +3,17 @@ import { useAppContext } from "../appContext.tsx";
 import { useCallback } from "react";
 import { TasksFilter } from "./types.ts";
 import { TasksWorker } from "./TasksWorker.ts";
+import { Task } from "../Task.ts";
 
 export const DayFilterComponent: React.FC = () => { 
 
-    const {setTasksFilter, tasksFilter, tasks } = useAppContext()
+    const {setFilter, allTasks, setFilteredTasks } = useAppContext()
 
     const handleFilterClick = useCallback(async (filter: TasksFilter) => { 
-        setTasksFilter(filter)
+        setFilter(filter)
         const tasksWorker = new TasksWorker()
         let data = new Date()
-        switch (tasksFilter) {
+        switch (filter) {
             case TasksFilter.TODAY:
                 data = new Date()
                 break
@@ -23,16 +24,22 @@ export const DayFilterComponent: React.FC = () => {
                 data = new Date(data.setDate(data.getDate() + (6 - data.getDay()))) // fix it
                 break
         }
-        console.log('filter', await tasksWorker.getTaskByDate(data, tasks)) 
-    }, [setTasksFilter, tasks, tasksFilter])
+        const filteredTasks = await tasksWorker.getTaskByDate(data, allTasks)
+        setFilteredTasks(filteredTasks as Task[])
+    }, [setFilter, allTasks, setFilteredTasks])
+
+    const handleIncomingClick = useCallback(async () => {
+        setFilter(TasksFilter.ALL)
+        setFilteredTasks(allTasks)
+    }, [allTasks, setFilteredTasks, setFilter])
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', position: 'absolute', top: '20vh'}}>
             <ButtonComponent title={'Today'} onClick={() => handleFilterClick(TasksFilter.TODAY)} hasIcon={true} iconPath={'/today.svg'} size={'medium'}/>
             <ButtonComponent title={'Tomorrow'} onClick={() => handleFilterClick(TasksFilter.TOMORROW)} hasIcon={true} iconPath={'/tomorrow.svg'} size={'medium'}/>
             <ButtonComponent title={'Weekend'} onClick={() => handleFilterClick(TasksFilter.WEEKEND)} hasIcon={true} iconPath={'/weekend.svg'} size={'medium'}/>
             <div style={{marginTop:60}}>
-                <ButtonComponent title={'Incoming'} onClick={() => handleFilterClick(TasksFilter.ALL)} hasIcon={true} iconPath={'/incoming.svg'} size={'medium'}/>
+                <ButtonComponent title={'Incoming'} onClick={handleIncomingClick} hasIcon={true} iconPath={'/incoming.svg'} size={'medium'}/>
             </div>
         </div>
     )
