@@ -11,7 +11,7 @@ export type Task = {
 export type TaskDTO = {
   id: number;
   title: string;
-  checked?: boolean;
+  completed?: boolean;
   priority?: number;
   description?: string;
   due_date: string;

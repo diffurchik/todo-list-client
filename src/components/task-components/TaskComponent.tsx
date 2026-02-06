@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
-    const [checked, setChecked] = useState<boolean>(false)
+    const [checked, setChecked] = useState<boolean>(task.checked ?? false)
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
 

@@ -10,7 +10,7 @@ export const taskMapper = (task: TaskDTO): Task => {
     return new Task({
         id: task.id,
         title: task.title,
-        checked: task.checked,
+        checked: task.completed,
         description: task.description,
         priority: task.priority,
         dueDate: task.due_date ? new Date(task.due_date) : new Date(),
