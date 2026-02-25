@@ -3,6 +3,7 @@ import {useCallback, useState} from "react";
 import {TaskMenu} from "./TaskMenu.tsx";
 import {IconButton} from "../atom-components/IconButton.tsx";
 import { Task } from "../../Task.ts";
+import { getFormattedDueDate } from "../../utils.ts";
 
 type Props = {
     index: number;
@@ -11,6 +12,7 @@ type Props = {
 
 export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
     const [checked, setChecked] = useState<boolean>(task.checked ?? false)
+    const [dueDate, setDueDate] = useState<Date>(task.dueDate)
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
 
@@ -30,15 +32,17 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
         setHovered(false)
     }, [])
 
-    const clickCheckbox = useCallback(() => {
-        setChecked((prev) => !prev)
-        task.setTaskAsDone()
-    }, [task])
+    const onDueDateChange = useCallback((date: Date) => {
+        setDueDate(date)
+    }, [])
 
-    const formattedDueDate = new Intl.DateTimeFormat('en-GB', {
-        day: 'numeric',
-        month: 'long'
-    }).format(new Date(task.dueDate as Date));
+    const clickCheckbox = useCallback(() => {
+        const isChecked = !checked;
+        task.setTaskCompleted(isChecked);
+        setChecked(isChecked);
+    }, [task, checked])
+
+    const formattedDueDate = getFormattedDueDate(dueDate);
 
     return (
         <>
@@ -73,7 +77,7 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                     <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20}/>
                 </div>
 
-                {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose}/>}
+                {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose} onDueDateChange={onDueDateChange}/>}
             </div>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <div style={{fontSize: 12}}>{`date: ${formattedDueDate}`}</div>

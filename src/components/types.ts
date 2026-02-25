@@ -14,7 +14,7 @@ export type TaskDTO = {
   completed?: boolean;
   priority?: number;
   description?: string;
-  due_date: string;
+  dueDate: string;
   repeated?: boolean;
 };
 

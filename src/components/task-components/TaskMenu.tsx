@@ -7,9 +7,10 @@ import { Task } from '../../Task.ts';
 type Props = {
     task: Task,
     onMenuClose: () => void
+    onDueDateChange: (date: Date) => void
 }
 
-export const TaskMenu: React.FC<Props> = ({task, onMenuClose}: Props) => {
+export const TaskMenu: React.FC<Props> = ({task, onMenuClose, onDueDateChange}: Props) => {
 
     const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
     const [isRepeatOpen, setIsRepeatOpen] = useState<boolean>(false);   
@@ -92,7 +93,7 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose}: Props) => {
                     </li>
                 </ul>
             </div>
-            {isCalendarOpen && <CalendarComponent task={task} setIsCalendarOpen={setIsCalendarOpen}/>}
+            {isCalendarOpen && <CalendarComponent task={task} setIsCalendarOpen={setIsCalendarOpen} onDueDateChange={onDueDateChange}/>}
             {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose} task={task}/>}
         </>
     )

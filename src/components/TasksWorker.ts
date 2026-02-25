@@ -14,9 +14,9 @@ export class TasksWorker {
     });
   }
 
-  setTaskAsDone(taskId: number): Promise<Task> {
+  setTaskCompleted(taskId: number, completed: boolean): Promise<Task> {
     return this.api.updateTask(taskId, {
-      completed: true,
+      completed,
     });
   }
 

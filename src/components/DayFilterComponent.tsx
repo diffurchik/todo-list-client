@@ -35,11 +35,13 @@ export const DayFilterComponent: React.FC = () => {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', position: 'absolute', top: '20vh'}}>
+            <div style={{marginBottom:20}}>
+                <ButtonComponent title={'Incoming'} onClick={handleIncomingClick} hasIcon={true} iconPath={'/incoming.svg'} size={'medium'}/>
+            </div>
             <ButtonComponent title={'Today'} onClick={() => handleFilterClick(TasksFilter.TODAY)} hasIcon={true} iconPath={'/today.svg'} size={'medium'}/>
             <ButtonComponent title={'Tomorrow'} onClick={() => handleFilterClick(TasksFilter.TOMORROW)} hasIcon={true} iconPath={'/tomorrow.svg'} size={'medium'}/>
-            <ButtonComponent title={'Weekend'} onClick={() => handleFilterClick(TasksFilter.WEEKEND)} hasIcon={true} iconPath={'/weekend.svg'} size={'medium'}/>
             <div style={{marginTop:60}}>
-                <ButtonComponent title={'Incoming'} onClick={handleIncomingClick} hasIcon={true} iconPath={'/incoming.svg'} size={'medium'}/>
+                <ButtonComponent title={'Weekend'} onClick={() => handleFilterClick(TasksFilter.WEEKEND)} hasIcon={true} iconPath={'/weekend.svg'} size={'medium'}/>
             </div>
         </div>
     )

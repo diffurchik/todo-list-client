@@ -16,9 +16,10 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 type Props = {
     task: Task,
     setIsCalendarOpen: (value: boolean) => void
+    onDueDateChange: (date: Date) => void
 }
 
-export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Props) => {
+export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen, onDueDateChange}: Props) => {
     const [value, onChange] = useState<Value>(new Date());
 
     const dateToFormat = Array.isArray(value) ? value[0] : value;
@@ -33,8 +34,8 @@ export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen}: Pr
     const handleSetDateClick = useCallback(async () => {
         try {
             if (dateToFormat) {
-                const updatedTask = await api.updateTask(task.id, {due_date: dateToFormat.toISOString()}); // move to task worker
-                console.log('Updated Task:', updatedTask);
+                await api.updateTask(task.id, {dueDate: dateToFormat.toISOString()}); // move to task worker
+                onDueDateChange(dateToFormat);
                 setIsCalendarOpen(false)
             }
         } catch (error) {

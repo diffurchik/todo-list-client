@@ -22,8 +22,8 @@ export class Task implements ITask {
 
     taskWorker = new TasksWorker();
 
-    setTaskAsDone(): void {
-        this.taskWorker.setTaskAsDone(this.id);
+    setTaskCompleted(completed: boolean): void {
+        this.taskWorker.setTaskCompleted(this.id, completed);
     }
 
     setTaskRepeated(repeated: boolean): void {

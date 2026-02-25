@@ -44,7 +44,7 @@ export class ApiService {
 
     async updateTask(
         id: number,
-        payload: Partial<Pick<TaskDTO, 'completed' | 'title' | 'due_date' | 'repeated'>>
+        payload: Partial<Pick<TaskDTO, 'completed' | 'title' | 'dueDate' | 'repeated'>>
     ): Promise<Task> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PUT',
