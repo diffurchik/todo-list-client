@@ -10,7 +10,7 @@ const api = new ApiService(API_BASE_URL);
 export const NewTask: React.FC = () => {
 
     const [newTask, setNewTask] = useState<string>('')
-    const {setAllTasks, setFilteredTasks} = useAppContext()
+    const {setAllTasks} = useAppContext()
     const timerRef = useRef<NodeJS.Timeout>();
 
     const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,11 +26,8 @@ export const NewTask: React.FC = () => {
         if (e.key === 'Enter') {
             const sendData = async () => {
                 try {
-                    const createdTask = await api.createTask({title: newTask}); //move to tasksWorker // avoid dependency on api
+                    const createdTask = await api.createTask({title: newTask});
                     setAllTasks((prev) => {
-                        return [...prev, taskMapper(createdTask)];
-                    });
-                    setFilteredTasks((prev) => {
                         return [...prev, taskMapper(createdTask)];
                     });
                     setNewTask('');
