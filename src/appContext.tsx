@@ -11,8 +11,6 @@ type AppContextProps = {
     setImage: React.Dispatch<React.SetStateAction<string | null>>;
     allTasks: Task[];
     setAllTasks: React.Dispatch<React.SetStateAction<Task[]>>
-    setFilteredTasks: React.Dispatch<React.SetStateAction<Task[]>>
-    filteredTasks: Task[];
     filter: TasksFilter;
     setFilter: React.Dispatch<React.SetStateAction<TasksFilter>>
 }
@@ -23,9 +21,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     const [image, setImage] = useState<string | null>(null);
     const [allTasks, setAllTasks] = useState<Task[]>([])
     const [filter, setFilter] = useState<TasksFilter>(TasksFilter.ALL)
-    const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
 
-    return <AppContext.Provider value={{image, setImage, allTasks, setAllTasks, filteredTasks, setFilteredTasks, filter, setFilter}}>{children}</AppContext.Provider>;
+    return <AppContext.Provider value={{image, setImage, allTasks, setAllTasks, filter, setFilter}}>{children}</AppContext.Provider>;
 }
 
 export const useAppContext = () => {

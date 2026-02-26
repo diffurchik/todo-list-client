@@ -1,20 +1,22 @@
 import * as React from "react";
-import {useCallback, useState} from "react";
-import {TaskMenu} from "./TaskMenu.tsx";
-import {IconButton} from "../atom-components/IconButton.tsx";
+import { useCallback, useState } from "react";
+import { TaskMenu } from "./TaskMenu.tsx";
+import { IconButton } from "../atom-components/IconButton.tsx";
 import { Task } from "../../Task.ts";
 import { getFormattedDueDate } from "../../utils.ts";
+import { useAppContext } from "../../appContext.tsx";
 
 type Props = {
     index: number;
     task: Task
 }
 
-export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
+export const TaskComponent: React.FC<Props> = ({ index, task }: Props) => {
     const [checked, setChecked] = useState<boolean>(task.checked ?? false)
     const [dueDate, setDueDate] = useState<Date>(task.dueDate)
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
+    const { setAllTasks } = useAppContext()
 
     const onMenuClick = useCallback(() => {
         setIsMenuOpen((prev) => !prev)
@@ -32,14 +34,26 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
         setHovered(false)
     }, [])
 
+    const updateTask = useCallback((updater: (t: Task) => void) => {
+        setAllTasks(prev => prev.map(i => {
+            if (i.id === task.id) {
+                updater(i)
+            }
+            return i
+        }
+        ))
+    }, [setAllTasks, task])
+
     const onDueDateChange = useCallback((date: Date) => {
         setDueDate(date)
-    }, [])
+        updateTask(t => t.dueDate = date)
+    }, [setAllTasks, task])
 
     const clickCheckbox = useCallback(() => {
         const isChecked = !checked;
         task.setTaskCompleted(isChecked);
         setChecked(isChecked);
+        updateTask(t => t.checked = isChecked)
     }, [task, checked])
 
     const formattedDueDate = getFormattedDueDate(dueDate);
@@ -57,7 +71,7 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                 width: 200,
                 marginBottom: '10px',
             }} onMouseEnter={onTaskHover}
-                 onMouseLeave={onTaskUnHover}>
+                onMouseLeave={onTaskUnHover}>
                 <div
                     style={{
                         color: 'black',
@@ -68,22 +82,22 @@ export const TaskComponent: React.FC<Props> = ({index, task}: Props) => {
                         alignItems: "center"
                     }}>
                     <input type={"checkbox"} id={`task_${index}`}
-                           style={{marginRight: 12, cursor: 'pointer', transform: 'scale(1.4)'}} checked={checked}
-                           onChange={clickCheckbox}/>
+                        style={{ marginRight: 12, cursor: 'pointer', transform: 'scale(1.4)' }} checked={checked}
+                        onChange={clickCheckbox} />
                     <label htmlFor={`task_${index}`}
-                           style={{textDecoration: checked ? 'line-through' : ''}}>{task.title}</label>
+                        style={{ textDecoration: checked ? 'line-through' : '' }}>{task.title}</label>
                 </div>
-                <div style={{opacity: isHovered ? 1 : 0}}>
-                    <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20}/>
+                <div style={{ opacity: isHovered ? 1 : 0 }}>
+                    <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20} />
                 </div>
 
-                {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose} onDueDateChange={onDueDateChange}/>}
+                {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose} onDueDateChange={onDueDateChange} />}
             </div>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <div style={{fontSize: 12}}>{`date: ${formattedDueDate}`}</div>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: 12 }}>{`date: ${formattedDueDate}`}</div>
                 {task.isTaskRepeated() && <img src={"/repeat.svg"} alt="repeat" style={{ width: 15, height: 15 }} />}
             </div>
-            <hr style={{opacity: 0.3}}/>
+            <hr style={{ opacity: 0.3 }} />
         </>
     )
 }
