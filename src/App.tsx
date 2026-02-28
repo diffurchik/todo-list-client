@@ -1,9 +1,9 @@
 import './App.css'
 import {AppProvider} from "./appContext.tsx";
 import styles from "./styles.module.css"
-import {TasksList} from "./components/task-components/TasksList.tsx";
 import {NewTask} from "./components/NewTask.tsx";
 import {DayFilterComponent} from "./components/DayFilterComponent.tsx";
+import { TasksListContainer } from './components/task-components/TasksListContainer.tsx';
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
                 </div>
                 <div className={styles.todolist}>
                     {/*<WeekBoardComponent />*/}
-                    <TasksList/>
+                    <TasksListContainer/>
                     <NewTask/>
                 </div>
             </div>

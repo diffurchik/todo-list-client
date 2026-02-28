@@ -6,7 +6,6 @@ import { Task } from "./types";
 export class TasksWorker {
   private api = new ApiService(API_BASE_URL);
   tasksList: Task[] | undefined;
-  // taskList = this.getAllTasks()
 
   getAllTasks(): Promise<Task[] | undefined> {
     return this.api.getAllTasks().then((list) => {

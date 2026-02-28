@@ -22,6 +22,10 @@ export class Task implements ITask {
 
     taskWorker = new TasksWorker();
 
+    setTaskDueTo(date: Date): void {
+        this.dueDate = date
+    }
+
     setTaskCompleted(completed: boolean): void {
         this.taskWorker.setTaskCompleted(this.id, completed);
     }
@@ -36,5 +40,11 @@ export class Task implements ITask {
 
     isTaskRepeated(): boolean {
         return this.repeated ?? false;
+    }
+
+    isTaskOverdue(){
+        const currentDay = new Date().getDay()
+        const dueDay = this.dueDate.getDay()
+        return currentDay > dueDay
     }
 }

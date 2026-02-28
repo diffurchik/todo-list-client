@@ -5,15 +5,24 @@ import { IconButton } from "../atom-components/IconButton.tsx";
 import { Task } from "../../Task.ts";
 import { getFormattedDueDate } from "../../utils.ts";
 import { useAppContext } from "../../appContext.tsx";
+import {
+    MenuWrapper,
+    RepeatIcon,
+    TaskCheckbox,
+    TaskDateText,
+    TaskMetaRow,
+    TaskRow,
+    TaskSeparator,
+    TaskTitleContainer,
+    TaskTitleLabel
+} from "./styles/task-component.style.tsx";
 
 type Props = {
     index: number;
     task: Task
 }
 
-export const TaskComponent: React.FC<Props> = ({ index, task }: Props) => {
-    const [checked, setChecked] = useState<boolean>(task.checked ?? false)
-    const [dueDate, setDueDate] = useState<Date>(task.dueDate)
+export const TaskComponent: React.FC<Props> = ({task }: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
     const { setAllTasks } = useAppContext()
@@ -45,59 +54,45 @@ export const TaskComponent: React.FC<Props> = ({ index, task }: Props) => {
     }, [setAllTasks, task])
 
     const onDueDateChange = useCallback((date: Date) => {
-        setDueDate(date)
+        task.setTaskDueTo(date)
+        
         updateTask(t => t.dueDate = date)
     }, [setAllTasks, task])
 
     const clickCheckbox = useCallback(() => {
-        const isChecked = !checked;
-        task.setTaskCompleted(isChecked);
-        setChecked(isChecked);
-        updateTask(t => t.checked = isChecked)
-    }, [task, checked])
+        const isChecked = task.checked;
+        task.setTaskCompleted(!isChecked);
+        updateTask(t => t.checked = !isChecked)
+    }, [task])
 
-    const formattedDueDate = getFormattedDueDate(dueDate);
+    const formattedDueDate = getFormattedDueDate(task.dueDate);
 
     return (
         <>
 
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '10px',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                position: 'relative',
-                width: 200,
-                marginBottom: '10px',
-            }} onMouseEnter={onTaskHover}
-                onMouseLeave={onTaskUnHover}>
-                <div
-                    style={{
-                        color: 'black',
-                        padding: 5,
-                        textAlign: 'left',
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center"
-                    }}>
-                    <input type={"checkbox"} id={`task_${index}`}
-                        style={{ marginRight: 12, cursor: 'pointer', transform: 'scale(1.4)' }} checked={checked}
-                        onChange={clickCheckbox} />
-                    <label htmlFor={`task_${index}`}
-                        style={{ textDecoration: checked ? 'line-through' : '' }}>{task.title}</label>
-                </div>
-                <div style={{ opacity: isHovered ? 1 : 0 }}>
+            <TaskRow onMouseEnter={onTaskHover} onMouseLeave={onTaskUnHover}>
+                <TaskTitleContainer>
+                    <TaskCheckbox
+                        type={"checkbox"}
+                        id={`task_${task.id}`}
+                        checked={task.checked}
+                        onChange={clickCheckbox}
+                    />
+                    <TaskTitleLabel htmlFor={`task_${task.id}`} $checked={task.checked}>
+                        {task.title}
+                    </TaskTitleLabel>
+                </TaskTitleContainer>
+                <MenuWrapper $isHovered={isHovered}>
                     <IconButton icon={"/three-dot.svg"} onClick={onMenuClick} height={20} width={20} />
-                </div>
+                </MenuWrapper>
 
                 {isMenuOpen && <TaskMenu task={task} onMenuClose={onMenuClose} onDueDateChange={onDueDateChange} />}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ fontSize: 12 }}>{`date: ${formattedDueDate}`}</div>
-                {task.isTaskRepeated() && <img src={"/repeat.svg"} alt="repeat" style={{ width: 15, height: 15 }} />}
-            </div>
-            <hr style={{ opacity: 0.3 }} />
+            </TaskRow>
+            <TaskMetaRow>
+                <TaskDateText $isOverdue={task.isTaskOverdue()}>{`${formattedDueDate}`}</TaskDateText>
+                {task.isTaskRepeated() && <RepeatIcon src={"/repeat.svg"} alt="repeat" />}
+            </TaskMetaRow>
+            <TaskSeparator />
         </>
     )
 }
