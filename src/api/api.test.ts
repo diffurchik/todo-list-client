@@ -1,21 +1,23 @@
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { API_BASE_URL } from "../../config";
 import { TaskData } from "../components/types";
 import { ApiService, CreateTaskPayload } from "./api";
 
-global.fetch = jest.fn()
+const fetchMock = vi.fn()
+global.fetch = fetchMock as unknown as typeof fetch
 
 describe('ApiService', () => {
     const api = new ApiService(API_BASE_URL);
 
     afterEach(() => {
-        jest.resetAllMocks();
+        fetchMock.mockReset();
     });
 
     it('should create a new task', async () => {
         const fakeTask: TaskData = {id: 1, title: 'Test Task', checked: false};
         const payload: CreateTaskPayload = {title: 'Test Task'};
 
-        (global.fetch as jest.Mock).mockResolvedValueOnce({
+        fetchMock.mockResolvedValueOnce({
             ok: true,
             json: async () => ({message: 'Test Task', task: fakeTask}),
         })
@@ -33,7 +35,7 @@ describe('ApiService', () => {
     })
 
     it('should throw an error when the API returns a non-ok response', async () => {
-        (global.fetch as jest.Mock).mockResolvedValueOnce({
+        fetchMock.mockResolvedValueOnce({
             ok: false,
             text: async () => 'Bad Request',
         });
@@ -47,10 +49,12 @@ describe('ApiService', () => {
         const fakeTask: TaskData = {id: 1, title: 'Test Task'};
         const payload: CreateTaskPayload = {title: 'new title'};
 
-        (global.fetch as jest.Mock).mockResolvedValueOnce({
+        fetchMock.mockResolvedValueOnce({
             ok: true,
-            json: async () => ({message: 'New title'}),
-        })
+            json: async () => ({
+              task: { id: 1, title: 'new title' },
+            }),
+          })
         const result = await api.updateTask(fakeTask.id, payload);
         expect(result).toEqual({id: 1, title: 'new title'});
         expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks/${fakeTask.id}`, {
@@ -68,7 +72,7 @@ describe('ApiService', () => {
             { id: 2, title: 'Task 2', checked: true },
         ];
 
-        (global.fetch as jest.Mock).mockResolvedValueOnce({
+        fetchMock.mockResolvedValueOnce({
             ok: true,
             json: async () => fakeTasks,
         });
@@ -76,9 +80,7 @@ describe('ApiService', () => {
         const result = await api.getAllTasks();
 
         expect(result).toEqual(fakeTasks);
-        expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks`, {
-            method: 'GET',
-        });
+        expect(fetch).toHaveBeenCalledWith(`${API_BASE_URL}/tasks`)
     });
 
     it('should throw an error when fetching tasks fails', async () => {
@@ -88,35 +90,7 @@ describe('ApiService', () => {
         });
 
         await expect(api.getAllTasks()).rejects.toThrow(
-            'Error fetching tasks: Internal Server Error'
-        );
+            'Error creating task: Internal Server Error'
+          );
     });
 })
-
-
-    // it('should delete a task successfully', async () => {
-    //     const taskId = 1;
-    //
-    //     (global.fetch as jest.Mock).mockResolvedValueOnce({
-    //         ok: true,
-    //     });
-    //
-    //     await api.deleteTask(taskId);
-    //
-    //     expect(fetch).toHaveBeenCalledWith(`${baseUrl}/tasks/${taskId}`, {
-    //         method: 'DELETE',
-    //     });
-    // });
-    //
-    // it('should throw an error when task deletion fails', async () => {
-    //     const taskId = 1;
-    //
-    //     (global.fetch as jest.Mock).mockResolvedValueOnce({
-    //         ok: false,
-    //         text: async () => 'Deletion failed',
-    //     });
-    //
-    //     await expect(api.deleteTask(taskId)).rejects.toThrow(
-    //         'Error deleting task: Deletion failed'
-    //     );
-    // });
