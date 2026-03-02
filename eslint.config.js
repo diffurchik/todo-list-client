@@ -26,7 +26,8 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       eqeqeq: ['error', 'always'],
-      curly: ['error', 'all'],
+      // Allow single-line control statements without braces
+      curly: ['error', 'multi-line'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-debugger': 'error',
       'no-var': 'error',

@@ -1,8 +1,6 @@
-import {ApiService, CreateTaskPayload} from "./api.ts";
-import {Task} from "./components/types.ts";
-import { API_BASE_URL } from '../config.ts';
-
-
+import { API_BASE_URL } from "../../config";
+import { TaskData } from "../components/types";
+import { ApiService, CreateTaskPayload } from "./api";
 
 global.fetch = jest.fn()
 
@@ -14,7 +12,7 @@ describe('ApiService', () => {
     });
 
     it('should create a new task', async () => {
-        const fakeTask: Task = {id: 1, title: 'Test Task', checked: false};
+        const fakeTask: TaskData = {id: 1, title: 'Test Task', checked: false};
         const payload: CreateTaskPayload = {title: 'Test Task'};
 
         (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -46,7 +44,7 @@ describe('ApiService', () => {
     });
 
     it('should update a task', async () => {
-        const fakeTask: Task = {id: 1, title: 'Test Task'};
+        const fakeTask: TaskData = {id: 1, title: 'Test Task'};
         const payload: CreateTaskPayload = {title: 'new title'};
 
         (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -65,7 +63,7 @@ describe('ApiService', () => {
     })
 
     it('should fetch all tasks successfully', async () => {
-        const fakeTasks: Task[] = [
+        const fakeTasks: TaskData[] = [
             { id: 1, title: 'Task 1', checked: false },
             { id: 2, title: 'Task 2', checked: true },
         ];

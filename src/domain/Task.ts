@@ -1,5 +1,6 @@
-import { TasksWorker } from "./components/TasksWorker.ts";
-import {ITask} from "./ITask.ts";
+
+import { TasksWorker } from "../components/TasksWorker.ts";
+import { ITask } from "./ITask.ts";
 
 export class Task implements ITask {
     id: number;
@@ -15,7 +16,7 @@ export class Task implements ITask {
         this.title = data.title;
         this.checked = data.checked;
         this.priority = data.priority;
-        this.description = data.description;    
+        this.description = data.description;
         this.dueDate = data.dueDate || new Date();
         this.repeated = data.repeated;
     }
@@ -24,6 +25,7 @@ export class Task implements ITask {
 
     setTaskDueTo(date: Date): void {
         this.dueDate = date
+        this.taskWorker.updateTask(this.id, {dueDate: date.toISOString()});
     }
 
     setTaskCompleted(completed: boolean): void {
@@ -42,9 +44,11 @@ export class Task implements ITask {
         return this.repeated ?? false;
     }
 
-    isTaskOverdue(){
-        const currentDay = new Date().getDay()
-        const dueDay = this.dueDate.getDay()
-        return currentDay > dueDay
+    isTaskOverdue() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const due = new Date(this.dueDate);
+        due.setHours(0, 0, 0, 0);
+        return due < today && !this.checked;
     }
 }

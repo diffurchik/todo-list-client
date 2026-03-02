@@ -1,14 +1,16 @@
 import { useEffect } from "react"
-import { useAppContext } from "../../appContext"
 import { TasksWorker } from "../TasksWorker"
-import { Task } from "../../Task"
-import { TasksList } from "./TasksList"
+import { Task } from "../../domain/Task.ts";
+import { TasksList } from "./TasksList.comp"
 import { useFilteredTasks } from "./hooks/useFilteredTasks"
 import { TasksFilter } from "../types"
+import { OverdueTasksSection } from "./OverdueTasksSection.comp"
+import { TasksSection } from "./TasksSection.comp"
+import { useAppContext } from "../../app/appContext.tsx";
 
 export const TasksListContainer: React.FC = () => {
     const { setAllTasks, allTasks, filter } = useAppContext()
-    const visibleTasks = useFilteredTasks(allTasks, filter);
+    const {overdueTasks, filteredTasks} = useFilteredTasks(allTasks, filter);
 
     let listTitle: string
     switch (filter) {
@@ -46,5 +48,12 @@ export const TasksListContainer: React.FC = () => {
         })
     }, [setAllTasks])
 
-    return <TasksList tasks={visibleTasks} listTitle={listTitle} />
+    return (
+        <>
+            {overdueTasks.length > 0 && <OverdueTasksSection tasks={overdueTasks} />}
+            <TasksSection title={listTitle}>
+                <TasksList tasks={filteredTasks} />
+            </TasksSection>
+        </>
+    )
 }

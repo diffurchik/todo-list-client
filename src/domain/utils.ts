@@ -1,4 +1,4 @@
-import {TaskDTO} from "./components/types.ts";
+import { TaskDTO } from "../components/types.ts";
 import { Task } from "./Task.ts";
 
 export const taskDTOToTaskMapper = (tasks: TaskDTO[]): Task[]| undefined => {

@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useCallback, useState } from "react";
-import { TaskMenu } from "./TaskMenu.tsx";
+import { TaskMenu } from "./TaskMenu.comp.tsx";
 import { IconButton } from "../atom-components/IconButton.tsx";
-import { Task } from "../../Task.ts";
-import { getFormattedDueDate } from "../../utils.ts";
-import { useAppContext } from "../../appContext.tsx";
+
 import {
     MenuWrapper,
     RepeatIcon,
@@ -16,6 +14,10 @@ import {
     TaskTitleContainer,
     TaskTitleLabel
 } from "./styles/task-component.style.tsx";
+import { useTasksActions } from "./hooks/useTasksActions.ts";
+import { useAppContext } from "../../app/appContext.tsx";
+import { Task } from "../../domain/Task.ts";
+import { getFormattedDueDate } from "../../domain/utils.ts";
 
 type Props = {
     index: number;
@@ -26,6 +28,7 @@ export const TaskComponent: React.FC<Props> = ({task }: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isHovered, setHovered] = useState<boolean>(false)
     const { setAllTasks } = useAppContext()
+    const { updateTask } = useTasksActions();
 
     const onMenuClick = useCallback(() => {
         setIsMenuOpen((prev) => !prev)
@@ -43,26 +46,26 @@ export const TaskComponent: React.FC<Props> = ({task }: Props) => {
         setHovered(false)
     }, [])
 
-    const updateTask = useCallback((updater: (t: Task) => void) => {
-        setAllTasks(prev => prev.map(i => {
-            if (i.id === task.id) {
-                updater(i)
-            }
-            return i
-        }
-        ))
-    }, [setAllTasks, task])
+    // const updateTask = useCallback((updater: (t: Task) => void) => {
+    //     setAllTasks(prev => prev.map(i => {
+    //         if (i.id === task.id) {
+    //             updater(i)
+    //         }
+    //         return i
+    //     }
+    //     ))
+    // }, [setAllTasks, task])
 
     const onDueDateChange = useCallback((date: Date) => {
         task.setTaskDueTo(date)
         
-        updateTask(t => t.dueDate = date)
+        updateTask(task.id, t => t.dueDate = date)
     }, [setAllTasks, task])
 
     const clickCheckbox = useCallback(() => {
         const isChecked = task.checked;
         task.setTaskCompleted(!isChecked);
-        updateTask(t => t.checked = !isChecked)
+        updateTask(task.id, t => t.checked = !isChecked)
     }, [task])
 
     const formattedDueDate = getFormattedDueDate(task.dueDate);

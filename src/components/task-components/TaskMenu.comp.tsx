@@ -1,8 +1,8 @@
 import styles from '../styles/task-menu.module.css'
 import {useCallback, useRef, useState, useEffect} from "react";
-import { CalendarComponent } from "./CalendarComponent.tsx";
-import { RepeatMenuComponent } from './RepeatMenuComponent.tsx';
-import { Task } from '../../Task.ts';
+import { CalendarComponent } from "./Calendar.comp.tsx";
+import { RepeatMenuComponent } from './RepeatMenu.comp.tsx';
+import { Task } from "../../domain/Task.ts";
 
 type Props = {
     task: Task,

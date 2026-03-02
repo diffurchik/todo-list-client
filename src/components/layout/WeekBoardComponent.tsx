@@ -1,4 +1,4 @@
-import {TasksList} from "./task-components/TasksList.tsx";
+import {TasksList} from "./task-components/TasksList.comp.tsx";
 
 export const WeekBoardComponent: React.FC = () => {
     return (

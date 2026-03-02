@@ -1,7 +1,8 @@
-import {ButtonComponent} from "./atom-components/ButtonComponent.tsx";
-import { useAppContext } from "../appContext.tsx";
 import { useCallback } from "react";
-import { TasksFilter } from "./types.ts";
+import { useAppContext } from "../../app/appContext";
+import { ButtonComponent } from "../atom-components/ButtonComponent";
+import { TasksFilter } from "../types";
+
 
 export const DayFilterComponent: React.FC = () => { 
 

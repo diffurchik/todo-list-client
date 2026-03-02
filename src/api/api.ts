@@ -1,4 +1,4 @@
-import {Task, TaskDTO} from "./components/types.ts";
+import {TaskData, TaskDTO} from "./components/types.ts";
 
 
 
@@ -45,7 +45,7 @@ export class ApiService {
     async updateTask(
         id: number,
         payload: Partial<Pick<TaskDTO, 'completed' | 'title' | 'dueDate' | 'repeated'>>
-    ): Promise<Task> {
+    ): Promise<TaskData> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PUT',
             headers: {

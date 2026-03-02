@@ -1,9 +1,10 @@
-import styles from "../styles.module.css";
+import { API_BASE_URL } from "../../../config";
+import { ApiService } from "../../api/api";
+import { useAppContext } from "../../app/appContext";
+import { taskMapper } from "../../domain/utils";
+import styles from "../../styles.module.css";
 import {useCallback, useState, useRef} from "react";
-import {useAppContext} from "../appContext.tsx";
-import {ApiService} from "../api.ts";
-import { API_BASE_URL } from '../../config.ts';
-import { taskMapper } from "../utils.ts";
+
 
 const api = new ApiService(API_BASE_URL);
 

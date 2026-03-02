@@ -1,6 +1,7 @@
+// useFilteredTasks.ts
 import { useMemo } from "react";
-import { Task } from "../../../Task";
 import { TasksFilter } from "../../types";
+import { Task } from "../../../domain/Task";
 
 const getDateForFilter = (filter: TasksFilter): Date | null => {
   const today = new Date();
@@ -27,23 +28,36 @@ const getDateForFilter = (filter: TasksFilter): Date | null => {
 const isSameDay = (a: Date, b: Date): boolean =>
   a.toDateString() === b.toDateString();
 
-const filterTasksByDate = (tasks: Task[], date: Date | null): Task[] => {
-  if (!date) {return tasks};
-
-  return tasks.filter((task) => {
-    if (!task.dueDate) {return false};
-
-    const taskDate =
-      task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate);
-
-    return isSameDay(taskDate, date);
-  });
-};
-
-export const useFilteredTasks = (tasks: Task[], filter: TasksFilter) => {
+export const useFilteredTasks = (
+  tasks: Task[],
+  filter: TasksFilter
+): { overdueTasks: Task[]; filteredTasks: Task[] } => {
   return useMemo(() => {
-    if (filter === TasksFilter.ALL) {return tasks};
-    const date = getDateForFilter(filter);
-    return filterTasksByDate(tasks, date);
+    const overdueTasks: Task[] = [];
+    const filteredTasks: Task[] = [];
+
+    const date = filter === TasksFilter.ALL ? null : getDateForFilter(filter);
+
+    for (const task of tasks) {
+      if (!task.dueDate) { continue };
+
+      if (task.isTaskOverdue()) {
+        overdueTasks.push(task);
+        continue;
+      }
+
+      if (!date) {
+        filteredTasks.push(task);
+      } else {
+        const taskDate =
+          task.dueDate instanceof Date ? task.dueDate : new Date(task.dueDate);
+
+        if (isSameDay(taskDate, date)) {
+          filteredTasks.push(task);
+        }
+      }
+    }
+
+    return { overdueTasks, filteredTasks };
   }, [tasks, filter]);
 };

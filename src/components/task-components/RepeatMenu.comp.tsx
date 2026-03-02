@@ -1,9 +1,9 @@
 import { useCallback } from "react"
-import { IconButton } from "../atom-components/IconButton"
-import WeekDaysPicker from "../atom-components/WeekDaysPicker"
+import { IconButton } from "../atom-components/IconButton.tsx"
+import WeekDaysPicker from "../atom-components/WeekDaysPicker.tsx"
 import styles from "../styles/button-apply.module.css"
 import { ButtonComponent } from "../atom-components/ButtonComponent.tsx"
-import { Task } from "../../Task.ts"
+import { Task } from "../../domain/Task.ts";
 type RepeatMenuComponentProps = {
     onClose: () => void,
     task: Task

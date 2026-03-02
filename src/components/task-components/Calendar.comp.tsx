@@ -3,11 +3,8 @@ import styles from "../styles/calendar.module.css"
 import 'react-calendar/dist/Calendar.css';
 import * as React from "react";
 import {useCallback, useState} from "react";
-import {ApiService} from "../../api.ts";
-import {Task} from "../../Task.ts";
 import {IconButton} from "../atom-components/IconButton.tsx";
-import { API_BASE_URL } from '../../../config.ts';
-const api = new ApiService(API_BASE_URL);
+import { Task } from "../../domain/Task.ts";
 
 type ValuePiece = Date | null;
 
@@ -34,7 +31,7 @@ export const CalendarComponent: React.FC<Props> = ({task, setIsCalendarOpen, onD
     const handleSetDateClick = useCallback(async () => {
         try {
             if (dateToFormat) {
-                await api.updateTask(task.id, {dueDate: dateToFormat.toISOString()}); // move to task worker
+                task.setTaskDueTo(dateToFormat);
                 onDueDateChange(dateToFormat);
                 setIsCalendarOpen(false)
             }

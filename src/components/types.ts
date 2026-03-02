@@ -1,4 +1,4 @@
-export type Task = {
+export type TaskData = {
   id: number;
   title: string;
   checked?: boolean;

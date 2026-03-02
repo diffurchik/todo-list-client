@@ -1,9 +1,9 @@
+import { DayFilterComponent } from '../components/layout/DayFilterComponent.tsx';
+import { NewTask } from '../components/layout/NewTask.tsx';
+import { TasksListContainer } from '../components/task-components/TasksListContainer.comp.tsx';
 import './App.css'
-import {AppProvider} from "./appContext.tsx";
-import styles from "./styles.module.css"
-import {NewTask} from "./components/NewTask.tsx";
-import {DayFilterComponent} from "./components/DayFilterComponent.tsx";
-import { TasksListContainer } from './components/task-components/TasksListContainer.tsx';
+import { AppProvider } from './appContext.tsx';
+import styles from '../styles.module.css'
 
 function App() {
 
