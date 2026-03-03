@@ -1,8 +1,10 @@
 import styles from '../styles/task-menu.module.css'
-import {useCallback, useRef, useState, useEffect} from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { CalendarComponent } from "./Calendar.comp.tsx";
 import { RepeatMenuComponent } from './RepeatMenu.comp.tsx';
 import { Task } from "../../domain/Task.ts";
+import { useTasksActions } from './hooks/useTasksActions.ts';
+import { DeleteComfirmModal } from '../atom-components/DeleteComfirmModal.tsx';
 
 type Props = {
     task: Task,
@@ -10,10 +12,13 @@ type Props = {
     onDueDateChange: (date: Date) => void
 }
 
-export const TaskMenu: React.FC<Props> = ({task, onMenuClose, onDueDateChange}: Props) => {
+export const TaskMenu: React.FC<Props> = ({ task, onMenuClose, onDueDateChange }: Props) => {
 
     const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
-    const [isRepeatOpen, setIsRepeatOpen] = useState<boolean>(false);   
+    const [isRepeatOpen, setIsRepeatOpen] = useState<boolean>(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+
+    const { deleteTask } = useTasksActions();
     const menuRef = useRef<HTMLDivElement>(null);
 
 
@@ -21,9 +26,12 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose, onDueDateChange}: 
         const handleClickOutside = (event: MouseEvent) => {
             const calendarElement = document.querySelector('#calendar-container');
             const repeatElement = document.querySelector('#repeat-menu');
+            const modalElement = document.querySelector('#modal-container');
+
             if (
-                menuRef.current && 
-                !menuRef.current.contains(event.target as Node) && 
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node) &&
+                (!modalElement || !modalElement.contains(event.target as Node)) &&
                 (!calendarElement || !calendarElement.contains(event.target as Node)) &&
                 (!repeatElement || !repeatElement.contains(event.target as Node))
             ) {
@@ -47,11 +55,22 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose, onDueDateChange}: 
     }, [])
 
     const handleDelete = useCallback(() => {
+        setIsDeleteModalOpen(prev => !prev)
 
     }, [])
 
+    const handleDeleteConfirm = useCallback(() => {
+        task.deleteTask()
+        deleteTask(task.id)
+        setIsDeleteModalOpen(false)
+    }, [task, deleteTask])
+
     const handleSetDate = useCallback(() => {
         setIsCalendarOpen((prev) => !prev)
+    }, [])
+
+    const onDeleteModalClose = useCallback(() => {
+        setIsDeleteModalOpen(false)
     }, [])
 
     return (
@@ -71,30 +90,35 @@ export const TaskMenu: React.FC<Props> = ({task, onMenuClose, onDueDateChange}: 
                 }}
             >
                 <ul className={styles.task_menu}>
-                    <li style={{padding: '5px', cursor: 'pointer'}} onClick={handleSetDate}>
+                    <li style={{ padding: '5px', cursor: 'pointer' }} onClick={handleSetDate}>
                         <img src="/calendar-icon4.svg" alt="Delete" width="16" height="16"
-                             style={{marginRight: '8px'}}/>
+                            style={{ marginRight: '8px' }} />
                         Set date
                     </li>
-                    <li style={{padding: '5px', cursor: 'pointer', opacity: 0.5}}>
+                    <li style={{ padding: '5px', cursor: 'pointer', opacity: 0.5 }}>
                         <img src="/tomorrow.svg" alt="Delete" width="16" height="16"
-                             style={{marginRight: '8px', opacity: 0.65}}/>
+                            style={{ marginRight: '8px', opacity: 0.65 }} />
                         Postpone to tomorrow
                     </li>
-                    <li style={{padding: '5px', cursor: 'pointer'}} onClick={handleRepeatOpen}>
+                    <li style={{ padding: '5px', cursor: 'pointer' }} onClick={handleRepeatOpen}>
                         <img src="/repeat.svg" alt="Repeat" width="16" height="16"
-                             style={{marginRight: '8px', opacity: 0.65}}/>
+                            style={{ marginRight: '8px', opacity: 0.65 }} />
                         Repeat task
                     </li>
-                    <hr style={{opacity: 0.5}}/>
+                    <hr style={{ opacity: 0.5 }} />
                     <li className={styles.delete} onClick={handleDelete}>
-                        <img src="/trash.svg" alt="Delete" width="16" height="16" style={{marginRight: '8px'}}/>
+                        <img src="/trash.svg" alt="Delete" width="16" height="16" style={{ marginRight: '8px'}} />
                         Delete task
                     </li>
+                    {isDeleteModalOpen && <DeleteComfirmModal
+                        isOpen={isDeleteModalOpen}
+                        onClose={onDeleteModalClose}
+                        onDelete={handleDeleteConfirm}
+                        text={`Are you sure you want to delete the task "${task.title}"?`} />}
                 </ul>
             </div>
-            {isCalendarOpen && <CalendarComponent task={task} setIsCalendarOpen={setIsCalendarOpen} onDueDateChange={onDueDateChange}/>}
-            {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose} task={task}/>}
+            {isCalendarOpen && <CalendarComponent task={task} setIsCalendarOpen={setIsCalendarOpen} onDueDateChange={onDueDateChange} />}
+            {isRepeatOpen && <RepeatMenuComponent onClose={handleRepeatClose} task={task} />}
         </>
     )
 }

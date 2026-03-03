@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../config";
 import { ApiService } from "../api/api";
+import { Task } from "../domain/Task";
 import { taskDTOToTaskMapper } from "../domain/utils";
 
 import { TaskData, TaskDTO } from "./types";
@@ -28,6 +29,10 @@ export class TasksWorker {
 
   updateTask(taskId: number, payload: Partial<Pick<TaskDTO, 'completed' | 'title' | 'dueDate' | 'repeated'>>): Promise<TaskData> {
     return this.api.updateTask(taskId, payload);
+  }
+
+  deleteTask(taskId: Task["id"]): Promise<void> {
+    return this.api.deleteTask(taskId)
   }
 
   async getTaskByDate(date: Date, tasks: TaskData[]): Promise<TaskData[]> {

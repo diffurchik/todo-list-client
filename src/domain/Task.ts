@@ -51,4 +51,8 @@ export class Task implements ITask {
         due.setHours(0, 0, 0, 0);
         return due < today && !this.checked;
     }
+
+    deleteTask(): void {
+        this.taskWorker.deleteTask(this.id)
+    }
 }

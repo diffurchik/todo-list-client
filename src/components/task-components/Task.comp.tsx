@@ -46,16 +46,6 @@ export const TaskComponent: React.FC<Props> = ({task }: Props) => {
         setHovered(false)
     }, [])
 
-    // const updateTask = useCallback((updater: (t: Task) => void) => {
-    //     setAllTasks(prev => prev.map(i => {
-    //         if (i.id === task.id) {
-    //             updater(i)
-    //         }
-    //         return i
-    //     }
-    //     ))
-    // }, [setAllTasks, task])
-
     const onDueDateChange = useCallback((date: Date) => {
         task.setTaskDueTo(date)
         

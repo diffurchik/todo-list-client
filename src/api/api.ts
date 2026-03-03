@@ -1,6 +1,5 @@
-import {TaskData, TaskDTO} from "./components/types.ts";
-
-
+import { TaskDTO } from "../components/types";
+import { Task } from "../domain/Task";
 
 export interface CreateTaskPayload {
     title: string;
@@ -45,7 +44,7 @@ export class ApiService {
     async updateTask(
         id: number,
         payload: Partial<Pick<TaskDTO, 'completed' | 'title' | 'dueDate' | 'repeated'>>
-    ): Promise<TaskData> {
+    ): Promise<Task> {
         const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: 'PUT',
             headers: {
@@ -70,12 +69,9 @@ export class ApiService {
                 'Content-Type': 'application/json',
             },
         })
-        console.log('deleted task', response);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Error deleting task: ${errorText}`);
         }
-        const data = await response.json();
-        return data.task;
     }
 }

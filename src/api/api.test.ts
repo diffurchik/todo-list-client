@@ -93,4 +93,19 @@ describe('ApiService', () => {
             'Error creating task: Internal Server Error'
           );
     });
+
+    it('should delete a task', async () => {
+        const fakeTask: TaskData = {id: 1, title: 'Test Task', checked: false};
+        fetchMock.mockResolvedValueOnce({
+            ok: true,
+        })
+
+        await api.deleteTask(fakeTask.id);
+        expect(fetchMock).toHaveBeenCalledWith(`${API_BASE_URL}/tasks/1`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    })
 })

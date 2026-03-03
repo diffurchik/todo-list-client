@@ -30,5 +30,10 @@ export const useTasksActions = () => {
           )
     }, [setAllTasks]);
   
-    return { updateTask, bulkUpdateTasks };
+    const deleteTask = useCallback((taskId: TaskData["id"]) => {
+      setAllTasks(prev => prev.filter(t => t.id !== taskId))
+    }, [setAllTasks])
+
+    return { updateTask, bulkUpdateTasks, deleteTask };
+
   };
